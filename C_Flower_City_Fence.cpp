@@ -1,46 +1,40 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-bool is_symmetric_fence(const vector<int>& fence) {
+bool isSymmetric(const vector<int>& fence) {
     int n = fence.size();
-    vector<int> horizontal_fence;
 
-    for (int i = n - 1; i >= 0; --i) {
-        while (horizontal_fence.size() < fence[i]) {
-            horizontal_fence.push_back(i + 1);
+    for (int i = 1; i < n; i++) {
+        if (fence[i] > fence[i - 1]) return false;
+    }
+
+    int index = 0;
+    for (int i = n - 1; i >= 0; i--) {
+        int next = (i + 1 < n ? fence[i + 1] : 0);
+        int count = fence[i] - next;
+
+        while (count--) {
+            if (index >= n || fence[index] != i + 1)
+                return false;
+            index++;
         }
     }
 
-    if (fence.size() != horizontal_fence.size()) {
-        return false;
-    }
-    for (int i = 0; i < n; ++i) {
-        if (fence[i] != horizontal_fence[i]) {
-            return false;
-        }
-    }
-    return true;
+    return index == n;
 }
 
 int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int n;
-        cin >> n;
-        vector<int> fence(n);
-        for (int i = 0; i < n; ++i) {
-            cin >> fence[i];
-        }
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
 
-        if (is_symmetric_fence(fence)) {
-            cout << "YES" << endl;
-        } else {
-            cout << "NO" << endl;
-        }
+    int t; cin >> t;
+    while (t--) {
+        int n; cin >> n;
+        vector<int> fence(n);
+        for (int i = 0; i < n; i++)
+            cin >> fence[i];
+
+        cout << (isSymmetric(fence) ? "YES\n" : "NO\n");
     }
     return 0;
 }
